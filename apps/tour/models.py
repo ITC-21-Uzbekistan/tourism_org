@@ -4,6 +4,7 @@ from django.db import models
 
 from apps.gallery.models import Image
 from apps.language.models import Language
+from apps.shrine.models import Shrine
 from utils.abstract import AbstractModel
 
 
@@ -43,6 +44,20 @@ class ContentTour(models.Model):
     tour_name = models.CharField(max_length=255)
     tour_info = models.TextField()
 
+    def __str__(self):
+        return self.tour_name
+
     class Meta:
         db_table = 'content_tour'
+        ordering = ['id']
+
+
+class ShrinesOfTour(models.Model):
+    id = models.PositiveBigIntegerField(primary_key=True, default=int(time.time() * 10), unique=True)
+    tour = models.ForeignKey(Tour, on_delete=models.CASCADE, related_name='tour')
+    order = models.PositiveIntegerField(default=1)
+    shrine = models.ForeignKey(Shrine, on_delete=models.CASCADE, related_name='shrine')
+
+    class Meta:
+        db_table = 'shrine_of_tour'
         ordering = ['id']
